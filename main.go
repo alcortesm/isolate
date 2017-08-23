@@ -2,17 +2,20 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
 )
 
-const usage = `usage:
+const usage = `Runs the specified command (and its arguments) with configurable
+levels of isolation.
 
+The standard input, output and error of the isolate command
+are redirected to the provided command.
+
+Usage:
 	isolate command [arguments]
 
-Runs a command (and its arguments) with configurable levels of isolation.
-
+The arguments are:
 	command:   the command to be run.
 	arguments: the command's arguments.
 `
@@ -20,13 +23,13 @@ Runs a command (and its arguments) with configurable levels of isolation.
 func main() {
 	cmd, err := parseArgs()
 	if err != nil {
-		log.Println(err)
-		fmt.Print(usage)
+		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 	if err := run(cmd...); err != nil {
-		log.Fatalln(err)
+		fmt.Fprintln(os.Stderr, err)
 	}
+	os.Exit(0)
 }
 
 func parseArgs() (cmd []string, err error) {
