@@ -34,12 +34,8 @@ func main() {
 	showExitCode := flag.Bool("exitCode", false,
 		"prints the exit code of the isolated command to stdout")
 	flag.Parse()
-	cmd := flag.Args()
-	if len(cmd) == 0 {
-		fmt.Fprintln(os.Stderr, "needs a command")
-		os.Exit(1)
-	}
-	exitCode, err := run(cmd)
+
+	exitCode, err := run(flag.Args())
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
@@ -47,10 +43,12 @@ func main() {
 	if *showExitCode {
 		fmt.Println("Exit Code", exitCode)
 	}
-	os.Exit(0)
 }
 
 func run(words []string) (int, error) {
+	if len(words) == 0 {
+		return 0, fmt.Errorf("missing command")
+	}
 	cmd := exec.Command(words[0], words[1:]...)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
@@ -64,7 +62,7 @@ func unixExitCodeOrError(err error) (int, error) {
 	if exitErr, ok = err.(*exec.ExitError); !ok {
 		return 0, err
 	}
-	var status syscall.WaitStatus // Unix
+	var status syscall.WaitStatus
 	if status, ok = exitErr.Sys().(syscall.WaitStatus); !ok {
 		return 0, fmt.Errorf(
 			"unsupported (non Unix) system-dependent exit information")
