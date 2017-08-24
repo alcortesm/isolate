@@ -31,6 +31,8 @@ Run a shell with isolated system identifiers:
 ```
 ; hostname
 cherry
+;
+;
 ; isolate -uts bash
 $ hostname
 cherry
@@ -38,6 +40,8 @@ $ hostname foo
 $ hostname
 foo
 $ exit
+;
+;
 ; hostname
 cherry
 ```
