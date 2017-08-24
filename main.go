@@ -11,8 +11,8 @@ import (
 const usage = `Runs the specified command (and its arguments) with configurable
 levels of isolation.
 
-The standard input, output and error of the isolate command
-are redirected to the provided command.
+The standard input, output and error of the isolated command
+are redirected to the ones of the "isolate" command.
 
 Usage:
 	isolate [options] command [arguments]
