@@ -1,7 +1,8 @@
 # Isolate
 
-A Linux command to run commands with configurable levels of isolation.
-Inspired by some popular containerization tools,
+A Linux command to run other commands with configurable levels of isolation.
+
+This program is inspired by some popular and more powerful containerization tools,
 like Docker.
 
 # Instalation
@@ -18,14 +19,14 @@ Run a command without any isolation whatsoever:
 no isolation at all
 ```
 
-Run a command and show it exit code:
+Run a command and show its exit code:
 ```
 ; isolate -exitCode echo show me your exit code
 show me your exit code
 Exit Code 0
 ```
 
-Runs a shell with isolated system identifiers:
+Run a shell with isolated system identifiers:
 
 ```
 ; hostname
