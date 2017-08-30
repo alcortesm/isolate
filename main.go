@@ -9,10 +9,11 @@ import (
 )
 
 const usage = `Runs the specified command (and its arguments) with configurable
-levels of isolation.
+levels of namespace isolation.
 
-The standard input, output and error of the isolated command
-are redirected to the ones of the main "isolate" process.
+The standard input, output and error of the isolated command are
+redirected to the ones of the main process (the one running the
+\"isolate\" process).
 
 Usage:
 	isolate [options] command [arguments]
@@ -24,7 +25,7 @@ The arguments are:
 	the command's arguments.
 
 The options are:
-`
+` // ... continued by flag.PrintDefaults().
 
 func main() {
 	flag.Usage = func() {
@@ -35,7 +36,13 @@ func main() {
 		"prints the exit code of the isolated command to stdout.")
 	opts := runOpts{
 		newUTS: flag.Bool("uts", false,
-			"run the isolated command in a new UTS namespace, initialized after the one of the main process."),
+			"run the isolated command in a new UTS namespace, initialized\n"+
+				"\tafter the one of the main process. Requires CAP_SYS_ADMIN and\n"+
+				"\tLinux >= 2.6.19"),
+		chroot: flag.String("dir", "",
+			"Change the root directory to the given directory and change\n"+
+				"the working directory to it before executing the command.\n"+
+				"Requires CAP_SYS_CHROOT."),
 	}
 	flag.Parse()
 
@@ -51,6 +58,7 @@ func main() {
 
 type runOpts struct {
 	newUTS *bool
+	chroot *string
 }
 
 func run(words []string, opts runOpts) (int, error) {
@@ -58,13 +66,19 @@ func run(words []string, opts runOpts) (int, error) {
 		return 0, fmt.Errorf("missing command")
 	}
 	cmd := exec.Command(words[0], words[1:]...)
+	//cmd := &exec.Cmd{Path: words[0], Args: words}
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.SysProcAttr = new(syscall.SysProcAttr)
 	if *opts.newUTS {
 		// requires Linux >= 2.6.19 and CAP_SYS_ADMIN
-		cmd.SysProcAttr.Cloneflags = syscall.CLONE_NEWUTS
+		cmd.SysProcAttr.Cloneflags |= syscall.CLONE_NEWUTS
+	}
+	if *opts.chroot != "" {
+		cmd.Dir = "/"
+		// requires CAP_SYS_CHROOT
+		cmd.SysProcAttr.Chroot = *opts.chroot
 	}
 	return unixExitCodeOrError(cmd.Run())
 }
