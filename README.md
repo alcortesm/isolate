@@ -26,37 +26,35 @@ like unshare, lxc or docker.
   Exit Code 0
   ```
 
-- Run a shell with isolated system identifiers:
+- Run a command in a root jail.
+  Requires CAP_SYS_ROOT:
   ```
-  ; hostname
-  cherry
+  ; sudo isolate -dir /tmp/foo ls /bla
+  [will show the list of files at /tmp/foo/bla]
+  ```
+
+- Run a command in a new user namespace.
+  This allows to run the command in an unprivileged namespaces environment
+  where the process runs with a full set of capabilities.
+  ```
+  ; isolate -dir /tmp/foo ls /bla
+  fork/exec /bin/ls: operation not permitted
   ;
-  ;
-  ; isolate -uts bash
+  ; isolate -userns -dir /tmp/foo ls /bla
+  [will show the list of files at /tmp/foo/bla]
+  ```
+
+- Run a shell with isolated system identifiers.
+  Requires CAP_SYS_ADMIN:
+  ```
+  ; sudo isolate -uts bash
   $ hostname
   cherry
   $ hostname foo
   $ hostname
   foo
   $ exit
-  ;
-  ;
   ; hostname
   cherry
   ```
 
-- Run a command in a root jail:
-  ```
-  ; isolate -dir /tmp/foo ls /bla
-  [will show the list of files at /tmp/foo/bla]
-  ```
-
-- Run a command in a new user namespace.
-  This allows to run the command in an unprivileged namespaces environment
-  where the process run with a full set of capabilities.
-  ```
-  ; isolate -uts echo bla
-  fork/exec /bin/echo: operation not permitted
-  ; isolate -userns -uts echo bla
-  bla
-  ```
