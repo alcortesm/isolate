@@ -48,5 +48,5 @@ like unshare, lxc or docker.
 - Run a command in a root jail:
   ```
   ; isolate -dir /tmp/foo ls /bla
-  [show contents of /tmp/foo/bla]
+  [will show the list of files at /tmp/foo/bla]
   ```
