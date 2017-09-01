@@ -38,11 +38,10 @@ func main() {
 		newUTS: flag.Bool("uts", false,
 			"run the isolated command in a new UTS namespace, initialized\n"+
 				"\tafter the one of the main process. Requires CAP_SYS_ADMIN and\n"+
-				"\tLinux >= 2.6.19"),
+				"\tLinux >= 2.6.19."),
 		chroot: flag.String("dir", "",
-			"Change the root directory to the given directory and change\n"+
-				"\tthe working directory to it before executing the command.\n"+
-				"\tRequires CAP_SYS_CHROOT."),
+			"Change the root directory to the given directory and use it\n"+
+				"\tas the working directory. Requires CAP_SYS_CHROOT."),
 	}
 	flag.Parse()
 
