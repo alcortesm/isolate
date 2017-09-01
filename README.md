@@ -50,3 +50,13 @@ like unshare, lxc or docker.
   ; isolate -dir /tmp/foo ls /bla
   [will show the list of files at /tmp/foo/bla]
   ```
+
+- Run a command in a new user namespace.
+  This allows to run the command in an unprivileged namespaces environment
+  where the process run with a full set of capabilities.
+  ```
+  ; isolate -uts echo bla
+  fork/exec /bin/echo: operation not permitted
+  ; isolate -userns -uts echo bla
+  bla
+  ```

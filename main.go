@@ -42,6 +42,9 @@ func main() {
 		chroot: flag.String("dir", "",
 			"Change the root directory to the given directory and use it\n"+
 				"\tas the working directory. Requires CAP_SYS_CHROOT."),
+		userns: flag.Bool("userns", false,
+			"Run the isolated command in a new user namespace, with a\n"+
+				"\tfull set of capabilities.  No privileges needed if Linux >= 3.8."),
 	}
 	flag.Parse()
 
@@ -58,6 +61,7 @@ func main() {
 type runOpts struct {
 	newUTS *bool
 	chroot *string
+	userns *bool
 }
 
 func run(words []string, opts runOpts) (int, error) {
@@ -78,6 +82,9 @@ func run(words []string, opts runOpts) (int, error) {
 		cmd.Dir = "/"
 		// requires CAP_SYS_CHROOT
 		cmd.SysProcAttr.Chroot = *opts.chroot
+	}
+	if *opts.userns {
+		cmd.SysProcAttr.Cloneflags |= syscall.CLONE_NEWUSER
 	}
 	return unixExitCodeOrError(cmd.Run())
 }
