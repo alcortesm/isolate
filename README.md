@@ -45,3 +45,10 @@ $ exit
 ; hostname
 cherry
 ```
+
+Run a command in root jail:
+
+```
+; isolate -dir /tmp/foo ls /bla
+[show contents of /tmp/foo/bla]
+```
