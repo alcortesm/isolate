@@ -33,10 +33,10 @@ func main() {
 		flag.PrintDefaults()
 	}
 	showExitCode := flag.Bool("exitCode", false,
-		"prints the exit code of the isolated command to stdout.")
+		"Prints the exit code of the isolated command to stdout.")
 	opts := runOpts{
 		newUTS: flag.Bool("uts", false,
-			"run the isolated command in a new UTS namespace, initialized\n"+
+			"Run the isolated command in a new UTS namespace, initialized\n"+
 				"\tafter the one of the main process. Requires CAP_SYS_ADMIN and\n"+
 				"\tLinux >= 2.6.19."),
 		chroot: flag.String("dir", "",
