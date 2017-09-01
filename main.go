@@ -41,8 +41,8 @@ func main() {
 				"\tLinux >= 2.6.19"),
 		chroot: flag.String("dir", "",
 			"Change the root directory to the given directory and change\n"+
-				"the working directory to it before executing the command.\n"+
-				"Requires CAP_SYS_CHROOT."),
+				"\tthe working directory to it before executing the command.\n"+
+				"\tRequires CAP_SYS_CHROOT."),
 	}
 	flag.Parse()
 
