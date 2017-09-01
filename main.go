@@ -13,7 +13,7 @@ levels of namespace isolation.
 
 The standard input, output and error of the isolated command are
 redirected to the ones of the main process (the one running the
-\"isolate\" process).
+"isolate" binary).
 
 Usage:
 	isolate [options] command [arguments]
