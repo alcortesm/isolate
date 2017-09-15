@@ -86,8 +86,8 @@ See the `userns` example below.
 
   After creating a new PID namespace, it is useful for the child to change its root directory and mount a new procfs instance at /proc so that tools such as ps(1) work correctly.
 
-  To achieve this, isolate a shell with the `pid` and the `mount` options and Use the `mount` option
-  and mount the new proc filesystem on top of the old one as follows:
+  To achieve this, isolate a shell with the `pid` and the `mount` options
+  and mount a new proc filesystem on top of the old one as follows:
   ```
   $ mount -t proc proc /proc
   ```
