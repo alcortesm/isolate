@@ -6,7 +6,7 @@ This program is inspired by some popular and more powerful tools,
 like unshare, lxc or docker.
 
 Most isolation levels require some capabilities(7),
-although the '-userns' allows to run the isolated command
+although the '-userns' option allows to run the isolated command
 in an unpriviledged namespace environment,
 as shown in the example below.
 
