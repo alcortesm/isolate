@@ -44,6 +44,10 @@ like unshare, lxc or docker.
   [will show the list of files at /tmp/foo/bla]
   ```
 
+  Note that user namespaces are disabled by default in some Linux distributions,
+  you can enable it with `echo 1 > /proc/sys/kernel/unprivileged_userns_clone`.
+  
+
 - Run a shell with isolated system identifiers.
   Requires CAP_SYS_ADMIN:
   ```
