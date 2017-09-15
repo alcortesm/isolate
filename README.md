@@ -27,7 +27,7 @@ like unshare, lxc or docker.
   ```
 
 - Run a command in a root jail.
-  Requires CAP_SYS_ROOT:
+  Requires capability CAP_SYS_ROOT:
   ```
   ; sudo isolate -dir /tmp/foo pwd
   /tmp/foo
@@ -50,7 +50,7 @@ like unshare, lxc or docker.
   
 
 - Run a shell with isolated system identifiers.
-  Requires CAP_SYS_ADMIN:
+  Requires capability CAP_SYS_ADMIN:
   ```
   ; sudo isolate -uts bash
   $ hostname
