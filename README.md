@@ -29,19 +29,19 @@ like unshare, lxc or docker.
 - Run a command in a root jail.
   Requires CAP_SYS_ROOT:
   ```
-  ; sudo isolate -dir /tmp/foo ls /bla
-  [will show the list of files at /tmp/foo/bla]
+  ; sudo isolate -dir /tmp/foo pwd
+  /tmp/foo
   ```
 
 - Run a command in a new user namespace.
   This allows to run the command in an unprivileged namespaces environment
   where the process runs with a full set of capabilities.
   ```
-  ; isolate -dir /tmp/foo ls /bla
-  fork/exec /bin/ls: operation not permitted
+  ; isolate -dir /tmp/foo pwd
+  fork/exec /bin/pwd: operation not permitted
   ;
-  ; isolate -userns -dir /tmp/foo ls /bla
-  [will show the list of files at /tmp/foo/bla]
+  ; isolate -userns -dir /tmp/foo pwd
+  /tmp/foo
   ```
 
   Note that user namespaces are disabled by default in some Linux distributions,
