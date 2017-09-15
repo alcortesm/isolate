@@ -5,6 +5,11 @@ A Linux command to run other commands in its own namespaces.
 This program is inspired by some popular and more powerful tools,
 like unshare, lxc or docker.
 
+Most isolation levels require some capabilities(7),
+although the '-userns' allows to run the isolated command
+in an unpriviledged namespace environment,
+as shown in the example below.
+
 # Instalation
 
 ```
@@ -27,7 +32,7 @@ like unshare, lxc or docker.
   ```
 
 - Run a command in a root jail.
-  Requires capability CAP_SYS_ROOT:
+  Requires CAP_SYS_ROOT.
   ```
   ; sudo isolate -dir /tmp/foo pwd
   /tmp/foo
@@ -35,8 +40,8 @@ like unshare, lxc or docker.
 
 - Run a command in a new user namespace.
   This allows to run the command in an unprivileged namespace environment
-  where the process runs with a full set of capabilities
-  (meaning you no longer need to execute isolate as root).
+  where the process runs with a full set of capabilities,
+  meaning you no longer need to execute isolate as root.
   ```
   ; isolate -dir /tmp/foo pwd
   fork/exec /bin/pwd: operation not permitted
@@ -50,7 +55,8 @@ like unshare, lxc or docker.
   
 
 - Run a shell with isolated system identifiers.
-  Requires capability CAP_SYS_ADMIN:
+  Requires CAP_SYS_ADMIN.
+
   ```
   ; sudo isolate -uts bash
   $ hostname
