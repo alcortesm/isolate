@@ -34,8 +34,9 @@ like unshare, lxc or docker.
   ```
 
 - Run a command in a new user namespace.
-  This allows to run the command in an unprivileged namespaces environment
-  where the process runs with a full set of capabilities.
+  This allows to run the command in an unprivileged namespace environment
+  where the process runs with a full set of capabilities
+  (meaning you no longer need to execute isolate as root).
   ```
   ; isolate -dir /tmp/foo pwd
   fork/exec /bin/pwd: operation not permitted
