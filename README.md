@@ -75,10 +75,12 @@ See the `userns` example below.
   cherry
   ```
 - Run a command in its own pid namespace.
+  Requires CAP_SYS_ADMIN.
   See pid_namespaces(7).
   ```
-  ; isolate -pid ps
-  0 ps
+  ; sudo isolate -pid sh
+  # echo $$
+  1
   ```
 
   A /proc filesystem shows (in the /proc/PID directories) only processes visible in the PID namespace of the process that performed the mount,
