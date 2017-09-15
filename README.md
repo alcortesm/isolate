@@ -42,6 +42,7 @@ See the `userns` example below.
 
 - Run a command in a root jail.
   Requires CAP_SYS_ROOT.
+  See chroot(2).
   ```
   ; sudo isolate -dir /tmp/foo pwd
   /tmp/foo
@@ -49,6 +50,7 @@ See the `userns` example below.
 
 - Run a command in a new user namespace,
   getting a full set of capabilities in the new namespace.
+  See user_namespaces(7).
   ```
   ; isolate -dir /tmp/foo pwd
   fork/exec /bin/pwd: operation not permitted
@@ -59,6 +61,7 @@ See the `userns` example below.
 
 - Run a shell with isolated system identifiers.
   Requires CAP_SYS_ADMIN.
+  See namespaces(7).
 
   ```
   ; sudo isolate -uts bash
@@ -71,4 +74,9 @@ See the `userns` example below.
   ; hostname
   cherry
   ```
-
+- Run a command in its own pid namespace.
+  See pid_namespaces(7).
+  ```
+  ; isolate -pid ps
+  0 ps
+  ```
