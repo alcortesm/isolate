@@ -94,7 +94,7 @@ See the `userns` example below.
   $ mount -t proc proc /proc
   ```
 
-- Run a command in its own mount namespace.
+- Run a command in its own mount namespace, see mount_namespaces(7).
   This isolates mount operations, as long as the propagation type
   of the mount point is not set to `MS_SHARED`
   (which is usually the case for '/').
