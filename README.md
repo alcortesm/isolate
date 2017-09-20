@@ -97,36 +97,42 @@ See the `userns` example below.
 - Run a command in its own mount namespace, see mount_namespaces(7).
   This isolates mount operations, as long as the propagation type
   of the mount point is not set to `MS_SHARED`
-  (which is usually the case for '/').
+  (which is usually the case for `/`).
 
-  In this example we will bind mount `/proc` to `/tmp/proc` in a subshell,
-  a fairly innocuous operation,
+  In this example we will bind mount `/proc` to `/tmp/foo` in a subshell,
   without affecting the mount points of the parent shell.
   To make this example complete,
-  the propagation type of '/' in the parent shell is `MS_SHARED`,
-  so we will have to change it before the mounting operation in the subshell:
+  the propagation type of `/` in the parent shell is, initially, `MS_SHARED`,
+  so we will change it to `MS_PRIVATE` before the mount operation
+  to prevent the mount event generated in the subshell
+  to be broadcasted to the parent shell:
   ```
-  ; mkdir /tmp/proc
+  ; mkdir /tmp/foo
+  ; df -T /tmp/foo
+  Filesystem                    Type 1K-blocks     Used Available Use% Mounted on
+  /dev/mapper/x1carbon--vg-root ext4 236298104 16552284 207672860   8% /
   ; findmnt -o TARGET,PROPAGATION /
   TARGET PROPAGATION
   /      shared
-  ; PS1='# ' sudo isolate -mount sh
-  # 
-  # 
-  # mount --make-rprivate / # stop propagating mounts to the peer group
-  # findmnt -o TARGET,PROPAGATION /
+  ; PS1='$ ' sudo isolate -mount sh
+  $ 
+  $ #### stop propagating mounts events
+  $ mount --make-rprivate /
+  $ findmnt -o TARGET,PROPAGATION /
   TARGET PROPAGATION
   /      private
-  # mount --bind /proc /tmp/proc
-  # mount | grep 'proc '
-  proc on /proc type proc (rw,nosuid,nodev,noexec,relatime)
-  proc on /tmp/proc type proc (rw,nosuid,nodev,noexec,relatime)
-  # exit
+  $
+  $ mount --bind /proc /tmp/foo
+  $ df -T /tmp/foo
+  Filesystem     Type 1K-blocks  Used Available Use% Mounted on
+  proc           proc         0     0         0    - /tmp/foo
+  $ exit
   ;
-  ;
+  ; #### check that everything is back to normal
   ; findmnt -o TARGET,PROPAGATION /
   TARGET PROPAGATION
   /      shared
-  ; mount | grep 'proc '
-  proc on /proc type proc (rw,nosuid,nodev,noexec,relatime)
+  ; df -T /tmp/foo
+  Filesystem                    Type 1K-blocks     Used Available Use% Mounted on
+  /dev/mapper/x1carbon--vg-root ext4 236298104 16552284 207672860   8% /
   ```
