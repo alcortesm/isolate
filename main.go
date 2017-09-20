@@ -46,7 +46,9 @@ func main() {
 			"Run the isolated command in a new user namespace, with a\n"+
 				"\tfull set of capabilities.  No privileges needed if Linux >= 3.8."),
 		pid: flag.Bool("pid", false,
-			"Run the command in its own process ID number space."),
+			"Run the command in its own process ID numberspace."),
+		mount: flag.Bool("mount", false,
+			"Run the comand int its own mount namespace."),
 	}
 	flag.Parse()
 
@@ -65,6 +67,7 @@ type runOpts struct {
 	chroot *string
 	userns *bool
 	pid    *bool
+	mount  *bool
 }
 
 func run(words []string, opts runOpts) (int, error) {
@@ -91,6 +94,10 @@ func run(words []string, opts runOpts) (int, error) {
 	}
 	if *opts.pid {
 		cmd.SysProcAttr.Cloneflags |= syscall.CLONE_NEWPID
+	}
+	if *opts.mount {
+		fmt.Println("newns")
+		cmd.SysProcAttr.Cloneflags |= syscall.CLONE_NEWNS
 	}
 	return unixExitCodeOrError(cmd.Run())
 }

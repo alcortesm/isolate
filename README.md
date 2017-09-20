@@ -93,3 +93,40 @@ See the `userns` example below.
   ```
   $ mount -t proc proc /proc
   ```
+
+- Run a command in its own mount namespace.
+  This isolates mount operations, as long as the propagation type
+  of the mount point is not set to `MS_SHARED`
+  (which is usually the case for '/').
+
+  In this example we will bind mount `/proc` to `/tmp/proc` in a subshell,
+  a fairly innocuous operation,
+  without affecting the mount points of the parent shell.
+  To make this example complete,
+  the propagation type of '/' in the parent shell is `MS_SHARED`,
+  so we will have to change it before the mounting operation in the subshell:
+  ```
+  ; mkdir /tmp/proc
+  ; findmnt -o TARGET,PROPAGATION /
+  TARGET PROPAGATION
+  /      shared
+  ; PS1='# ' sudo isolate -mount sh
+  # 
+  # 
+  # mount --make-rprivate / # stop propagating mounts to the peer group
+  # findmnt -o TARGET,PROPAGATION /
+  TARGET PROPAGATION
+  /      private
+  # mount --bind /proc /tmp/proc
+  # mount | grep 'proc '
+  proc on /proc type proc (rw,nosuid,nodev,noexec,relatime)
+  proc on /tmp/proc type proc (rw,nosuid,nodev,noexec,relatime)
+  # exit
+  ;
+  ;
+  ; findmnt -o TARGET,PROPAGATION /
+  TARGET PROPAGATION
+  /      shared
+  ; mount | grep 'proc '
+  proc on /proc type proc (rw,nosuid,nodev,noexec,relatime)
+  ```
